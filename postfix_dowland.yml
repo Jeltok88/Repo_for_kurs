@@ -1,0 +1,15 @@
+- hosts: test
+  tags: init postfix
+  tasks:
+    - name: Installs postfix mail server
+      apt: pkg=postfix state=installed update_cache=true
+      notify:
+        - start postfix
+
+- hosts: test
+  tags: drop
+  tasks:
+    - name: Del postfix
+      apt: pkg=postfix state=deleted
+      notify:
+        - del postfix
