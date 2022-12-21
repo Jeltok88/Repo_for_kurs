@@ -1,0 +1,32 @@
+---
+ - name: Create group wheel
+  group:
+    name: wheel
+    state: present
+
+- name: passwordless sudo
+  lineinfile:
+    dest: /etc/sudousers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Add user2 to wheel group
+  user:
+    name=user2
+    groups=wheel
+    append=yes
+    state=present
+    createhome=yes
+- name: Add user3 to wheel group
+  user:
+    name=user3
+    groups=wheel
+    append=yes
+    state=present
+    createhome=yes
+- name: Set up authorized keys for the users
+  authorized_key: user=deployer key="{{item}}"
+  with_file:
+    - /home/jeltok/.ssh/id_rsa.pub
