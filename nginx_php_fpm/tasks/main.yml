@@ -36,3 +36,13 @@
     name: php-fpm
     state: started
     enabled: yes
+- name: Create document root
+  file:
+    path: /opt/nginx/ansible/
+    state: directory
+- name: copy from usr_share_nginx_html to opt_nginx_ansible
+  copy: 
+    src: /usr/share/nginx/html/
+    dest: /opt/nginx/ansible/
+    remote_src: yes
+  notify: Restart nginx
